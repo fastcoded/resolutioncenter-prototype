@@ -184,40 +184,6 @@ Any deep link skips the landing page, so headless captures are pixel-stable.
 
 ---
 
-## Publishing to GitHub Pages
-
-GitHub Pages serves static files to anyone who asks — there is no basic auth, and a login
-screen written in JavaScript is decoration, because the bundle behind it is still a public
-URL. `npm run seal` removes the thing worth protecting instead.
-
-```bash
-PROTO_PASS='your passphrase' npm run seal     # PowerShell: $env:PROTO_PASS='…'; npm run seal
-npx gh-pages -d dist                          # publish; replaces the branch contents
-```
-
-What the seal does:
-
-1. Builds, then folds the entire app into one HTML document — CSS inlined, JS inlined,
-   the backdrop artwork converted to a data URI.
-2. Encrypts that document with **AES-256-GCM**, key derived by **PBKDF2-SHA256, 310,000
-   iterations, random 16-byte salt**.
-3. Writes `dist/index.html` — an unlock page plus ciphertext — and deletes `dist/assets/`,
-   so only `index.html` is published.
-
-The passphrase is read from the environment and never written to disk, the repo, or the
-output. Without it the server holds random bytes: no markup, no script, no copy.
-
-**Its limits, stated plainly.** This is offline-crackable. An attacker downloads the
-ciphertext and guesses at leisure; the 310,000 iterations make each guess expensive, but a
-short passphrase still falls. Use several random words. For genuine protection, put the
-site behind server-side auth — Cloudflare Pages with Cloudflare Access is free and
-authenticates before serving a single byte, which GitHub Pages cannot do.
-
-If an earlier deploy published the unencrypted bundle, delete `assets/` from the
-`gh-pages` branch — and remember that deleting a file does not remove it from history.
-
----
-
 ## Structure
 
 ```
