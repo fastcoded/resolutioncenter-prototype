@@ -1,4 +1,4 @@
-# Resolution Centre — concept prototype
+# Resolution Centre - concept prototype
 
 An in-app Resolution Centre for a Pakistani digital wallet, built for a Product Analyst
 case study. Concept only. It uses a generic "Wallet" wordmark and is not affiliated with, or branded
